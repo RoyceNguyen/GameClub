@@ -3,10 +3,15 @@ package com.example.install.gameclub;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 
 
 /**
@@ -26,7 +31,8 @@ public class RulesContentFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private ViewPager viewPager;
+    private SectionPagerAdapter sectionPagerAdapter;
     private OnFragmentInteractionListener mListener;
 
     public RulesContentFragment() {
@@ -64,9 +70,41 @@ public class RulesContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rules_content, container, false);
+        View view = inflater.inflate(R.layout.fragment_rules_content, container, false);
+        sectionPagerAdapter = new SectionPagerAdapter(getChildFragmentManager());
+        viewPager = (ViewPager) view.findViewById(R.id.rulecontent);
+        viewPager.setAdapter(sectionPagerAdapter);
+        if(savedInstanceState == null){
+            Snackbar.make(view, "Please swipe left to read through the rules", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+        return view;
     }
+    public class SectionPagerAdapter extends FragmentPagerAdapter {
+        public SectionPagerAdapter(FragmentManager fm){
+            super(fm);
+        }
+        public Fragment getItem(int position){
+            switch(position){
+                case 0:
+                    return RulesFragment.newInstance("Rule #1", "DO NOT sacrifice your study for the club , club activities should only be taken during your free time.");
+                case 1:
+                    return RulesFragment.newInstance("Rule #2", "Play and carries out activities in a way so that everyone have fun .This involves knowing and following the rules, Staying focused on the game, playing at an appropriate volume level, showing good sportsmanship and making consensus decisions on the games that are played.\n");
+                case 2:
+                    return RulesFragment.newInstance("Rule #3", "Treat the game materials with the utmost respect . This means that treating club's properties like consoles , peripherals, tools ,etc carefully.If you played or handled any club's equipments,make sure to clean up before leaving ");
+                case 3:
+                    return RulesFragment.newInstance("Rule #4", "Food and drinks are not allowed inside the clubroom due to potential risk of damaging equipments");
+                case 4:
+                    return RulesFragment.newInstance("Rule #5", "If you break it , you pay for it . Meaning any serious damage caused to equipment will result in the person having to pay back to the club so we can get a replacement");
+                default:
+                    return RulesFragment.newInstance("Rule #1", "DO NOT sacrifice your study for the club , club activities should only be taken during your free time.");
+            }
+        }
+        public int getCount(){
+            return 5;
+        }
 
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

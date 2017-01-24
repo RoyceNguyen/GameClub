@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -65,6 +66,14 @@ public class RulesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_rules, container, false);
+        if(mParam1 != null){
+            TextView text = (TextView) view.findViewById(R.id.title);
+            text.setText(mParam1);
+        }
+        if(mParam2 != null){
+            TextView text = (TextView) view.findViewById(R.id.description);
+            text.setText(mParam2);
+        }
 
         return view;
     }
