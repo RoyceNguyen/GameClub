@@ -19,7 +19,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainFragment.OnFragmentInteractionListener,RulesContentFragment.OnFragmentInteractionListener,
-RulesFragment.OnFragmentInteractionListener,ScheduleContentFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener
+RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener,ContactFragment.OnFragmentInteractionListener
 {
     FragmentManager fm = getSupportFragmentManager();
     String name = "Royce Nguyen";
@@ -108,7 +108,7 @@ RulesFragment.OnFragmentInteractionListener,ScheduleContentFragment.OnFragmentIn
         } else if (id == R.id.nav_schedule) {
             FragmentTransaction tran = fm.beginTransaction();
             tran.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-            tran.replace(R.id.content_main, new ScheduleContentFragment());
+            tran.replace(R.id.content_main, new ScheduleFragment());
             tran.commit();
 
         } else if (id == R.id.nav_contact) {

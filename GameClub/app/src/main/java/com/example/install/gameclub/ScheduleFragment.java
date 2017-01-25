@@ -7,6 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 
 /**
@@ -26,6 +32,8 @@ public class ScheduleFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    ListView list;
+    TextView ScheduleTextView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,9 +72,73 @@ public class ScheduleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_schedule, container, false);
+        View view = inflater.inflate(R.layout.fragment_schedule, container, false);
+        list = (ListView) view.findViewById(R.id.schedulelist);
+        final ArrayList<ScheduleContentFragment> schedulelist = new ArrayList<ScheduleContentFragment>();
+        schedulelist.add(new ScheduleContentFragment("Monday", "4-6pm Console Games Day"));
+        schedulelist.add(new ScheduleContentFragment("Tuesday", "6-9pm PC Games Day"));
+        schedulelist.add(new ScheduleContentFragment("Wednesday", "No club activities"));
+        schedulelist.add(new ScheduleContentFragment("Thursday", "4-8pm Board Game Day"));
+        schedulelist.add(new ScheduleContentFragment("Friday", "4-9pm PC Games Day"));
+        schedulelist.add(new ScheduleContentFragment("Weekends", "No club activities"));
+        final CustomAdapter adapter = new CustomAdapter(getContext(), schedulelist);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ScheduleTextView =
+                        (TextView) view.findViewById(R.id.description);
+                if(ScheduleTextView.getText() == ""){
+                    ScheduleTextView.setText(
+                            ((ScheduleContentFragment) list.getItemAtPosition(position)).getDescription());
+                }
+                else{
+                    ScheduleTextView.setText("");
+                }
+            }
+        });
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                schedulelist.remove(position);
+                adapter.notifyDataSetChanged();
+                return false;
+            }
+        });
+        return view;
     }
+    public class CustomAdapter extends ArrayAdapter<ScheduleContentFragment> {
 
+        public CustomAdapter(Context context, ArrayList<ScheduleContentFragment> items) {
+            super(context, 0, items);
+        }
+
+        /**
+         * getView is used to take every item in a list
+         * and assign a view to it.
+         * With this specific adapter we specified item_view as the view
+         * we want every item in a list to look like.
+         * After that item has item_view attached to it
+         * we populate the item_view's name TextView
+         */
+        public View getView(int position, View convertView, ViewGroup parent){
+            ScheduleContentFragment item = getItem(position);
+
+            if(convertView == null){
+                convertView =
+                        LayoutInflater.from(getContext()).inflate(
+                                R.layout.item_view, parent, false);
+            }
+
+            TextView name = (TextView) convertView.findViewById(R.id.name);
+            name.setText(item.getName());
+
+            return  convertView;
+        }
+
+
+
+    }
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
