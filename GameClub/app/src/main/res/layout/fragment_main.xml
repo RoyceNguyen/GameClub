@@ -1,9 +1,33 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.install.gameclub.MainFragment">
+    tools:context="com.example.install.gameclub.MainFragment"
+    android:orientation="vertical">
+
 
     <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Game Club"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorPrimary" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="57dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Join us and have some fun"
+        android:id="@+id/textView3"
+        android:gravity="center_vertical|center_horizontal"
+        android:textStyle="bold|italic" />
 
-</FrameLayout>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/game"
+        android:id="@+id/imageView2" />
+</LinearLayout>
