@@ -1,9 +1,12 @@
 package com.example.install.gameclub;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +21,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainFragment.OnFragmentInteractionListener,RulesContentFragment.OnFragmentInteractionListener,
 RulesFragment.OnFragmentInteractionListener,ScheduleContentFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener
 {
-
+    FragmentManager fm = getSupportFragmentManager();
+    String name = "Royce Nguyen";
+    String email = "Hoangtu.Nguyen11@stclairconnect.ca";
+    public static FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +32,13 @@ RulesFragment.OnFragmentInteractionListener,ScheduleContentFragment.OnFragmentIn
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        //We first check to see if the activity has already been created
+        if(savedInstanceState == null){
+            FragmentTransaction tran = fm.beginTransaction();
+            tran.replace(R.id.content_main, new MainFragment());
+            tran.commit();
+        }
+       /* fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,7 +46,7 @@ RulesFragment.OnFragmentInteractionListener,ScheduleContentFragment.OnFragmentIn
                         .setAction("Action", null).show();
             }
         });
-
+        */
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -83,18 +95,37 @@ RulesFragment.OnFragmentInteractionListener,ScheduleContentFragment.OnFragmentIn
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_intro) {
+            FragmentTransaction tran = fm.beginTransaction();
+            tran.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            tran.replace(R.id.content_main, new MainFragment());
+            tran.commit();
+        } else if (id == R.id.nav_rule) {
+            FragmentTransaction tran = fm.beginTransaction();
+            tran.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            tran.replace(R.id.content_main, new RulesContentFragment());
+            tran.commit();
+        } else if (id == R.id.nav_schedule) {
+            FragmentTransaction tran = fm.beginTransaction();
+            tran.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            tran.replace(R.id.content_main, new ScheduleContentFragment());
+            tran.commit();
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_contact) {
+            String[] emailaddresses = {email};
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:"));
+            intent.putExtra(Intent.EXTRA_EMAIL, emailaddresses);
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Question about the game club");
+            intent.putExtra(Intent.EXTRA_TEXT, "Hey Royce, I have some questions about...");
+            if(intent.resolveActivity(getPackageManager()) != null){
+                startActivity(intent);
+            }
+            else{
+                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                        "No installed software to complete the task", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
