@@ -32,6 +32,7 @@ public class ScheduleFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    //creating variables for the listview and textview
     ListView list;
     TextView ScheduleTextView;
 
@@ -73,6 +74,7 @@ public class ScheduleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
+        //creating the listview and adding contents to the listview
         list = (ListView) view.findViewById(R.id.schedulelist);
         final ArrayList<ScheduleContentFragment> schedulelist = new ArrayList<ScheduleContentFragment>();
         schedulelist.add(new ScheduleContentFragment("Monday", "4-6pm Console Games Day"));
@@ -81,6 +83,7 @@ public class ScheduleFragment extends Fragment {
         schedulelist.add(new ScheduleContentFragment("Thursday", "4-8pm Board Game Day"));
         schedulelist.add(new ScheduleContentFragment("Friday", "4-9pm PC Games Day"));
         schedulelist.add(new ScheduleContentFragment("Weekends", "No club activities"));
+        //using a custom adapter for the list view
         final CustomAdapter adapter = new CustomAdapter(getContext(), schedulelist);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,6 +100,7 @@ public class ScheduleFragment extends Fragment {
                 }
             }
         });
+        //creating a listener when item is clicked
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {

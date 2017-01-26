@@ -66,6 +66,7 @@ public class RulesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_rules, container, false);
+        //check whether or not title and description is empty , if it is , set the next to mParam1 and mParam2
         if(mParam1 != null){
             TextView text = (TextView) view.findViewById(R.id.title);
             text.setText(mParam1);

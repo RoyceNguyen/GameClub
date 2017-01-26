@@ -1,5 +1,5 @@
 package com.example.install.gameclub;
-
+//blank fragment to be used with the item view
 public class ScheduleContentFragment{
     private String name;
     private String description;

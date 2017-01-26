@@ -19,11 +19,14 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainFragment.OnFragmentInteractionListener,RulesContentFragment.OnFragmentInteractionListener,
-RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener,ContactFragment.OnFragmentInteractionListener
+RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener
 {
+    //creating a fragment manager
     FragmentManager fm = getSupportFragmentManager();
+    //string variables for contact details
     String name = "Royce Nguyen";
     String email = "Hoangtu.Nguyen11@stclairconnect.ca";
+    //commenting out fab button since we dont need it
     public static FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +97,7 @@ RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteracti
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        //adding fragment transaction to navigate through the drawer items
         if (id == R.id.nav_intro) {
             FragmentTransaction tran = fm.beginTransaction();
             tran.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);

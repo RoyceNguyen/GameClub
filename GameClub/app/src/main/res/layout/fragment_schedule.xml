@@ -5,7 +5,7 @@
     tools:context="com.example.install.gameclub.ScheduleFragment"
     android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- adding a listview to the fragment -->
     <ListView
         android:id="@+id/schedulelist"
         android:layout_width="match_parent"

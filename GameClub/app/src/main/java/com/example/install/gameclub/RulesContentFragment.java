@@ -30,6 +30,7 @@ public class RulesContentFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+    //creating variables for the viewpager and section adapter
     private String mParam1;
     private String mParam2;
     private ViewPager viewPager;
@@ -72,9 +73,11 @@ public class RulesContentFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_rules_content, container, false);
+        //creating the viewpager
         sectionPagerAdapter = new SectionPagerAdapter(getChildFragmentManager());
         viewPager = (ViewPager) view.findViewById(R.id.rulecontent);
         viewPager.setAdapter(sectionPagerAdapter);
+        //creating a snackbar to notify user to keep on swiping
         if(savedInstanceState == null){
             Snackbar.make(view, "Please swipe left to read through the rules", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
@@ -86,6 +89,7 @@ public class RulesContentFragment extends Fragment {
             super(fm);
         }
         public Fragment getItem(int position){
+            //adding content to the viewpager
             switch(position){
                 case 0:
                     return RulesFragment.newInstance("Rule #1", "DO NOT sacrifice your study for the club , club activities should only be taken during your free time.");
