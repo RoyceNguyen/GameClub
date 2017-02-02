@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -28,7 +29,9 @@ public class RulesFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
+    private int mParam2;
+    //Create a location to store it
+    private String mParam3;
 
     private OnFragmentInteractionListener mListener;
 
@@ -45,11 +48,12 @@ public class RulesFragment extends Fragment {
      * @return A new instance of fragment RulesFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RulesFragment newInstance(String param1, String param2) {
+    public static RulesFragment newInstance(String param1, int param2 , String param3) {
         RulesFragment fragment = new RulesFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM3, param3);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,7 +63,8 @@ public class RulesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam2 = getArguments().getInt(ARG_PARAM2);
+            mParam3 = getArguments().getString(ARG_PARAM3);
         }
     }
 
@@ -73,9 +78,13 @@ public class RulesFragment extends Fragment {
             TextView text = (TextView) view.findViewById(R.id.title);
             text.setText(mParam1);
         }
-        if(mParam2 != null){
+        if(mParam2 != 0){
+            ImageView image = (ImageView) view.findViewById(R.id.itemImage);
+            image.setImageResource(mParam2);
+        }
+        if(mParam3 != null){
             TextView text = (TextView) view.findViewById(R.id.description);
-            text.setText(mParam2);
+            text.setText(mParam3);
         }
 
         return view;
