@@ -1,4 +1,5 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,5 +11,19 @@
         android:layout_height="match_parent"
         android:id="@+id/rulecontent">
     </android.support.v4.view.ViewPager>
+
+    <ImageButton
+        android:layout_width="38dp"
+        android:layout_height="108dp"
+        android:layout_gravity="center_vertical|left"
+        app:srcCompat="@drawable/ic_arrow_back_black_24dp"
+        android:id="@+id/left" />
+
+    <ImageButton
+        android:layout_width="38dp"
+        android:layout_height="108dp"
+        android:layout_gravity="center_vertical|right"
+        app:srcCompat="@drawable/ic_arrow_forward_black_24dp"
+        android:id="@+id/right" />
 
 </FrameLayout>
