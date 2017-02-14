@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import static com.example.install.gameclub.R.attr.title;
+import static com.example.install.gameclub.R.id.location;
 
 
 /**
@@ -32,12 +36,15 @@ public class ScheduleFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     //creating variables for the listview and textview
     ListView list;
     TextView ScheduleTextView;
+    long begin;
+    long end;
 
     private OnFragmentInteractionListener mListener;
 
@@ -69,6 +76,7 @@ public class ScheduleFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -80,12 +88,13 @@ public class ScheduleFragment extends Fragment {
         //creating the listview and adding contents to the listview
         list = (ListView) view.findViewById(R.id.schedulelist);
         final ArrayList<ScheduleContentFragment> schedulelist = new ArrayList<ScheduleContentFragment>();
-        schedulelist.add(new ScheduleContentFragment("Monday", "4-6pm Console Games Day"));
-        schedulelist.add(new ScheduleContentFragment("Tuesday", "6-9pm PC Games Day"));
-        schedulelist.add(new ScheduleContentFragment("Wednesday", "No club activities"));
-        schedulelist.add(new ScheduleContentFragment("Thursday", "4-8pm Board Game Day"));
-        schedulelist.add(new ScheduleContentFragment("Friday", "4-9pm PC Games Day"));
-        schedulelist.add(new ScheduleContentFragment("Weekends", "No club activities"));
+        schedulelist.add(new ScheduleContentFragment("Monday", "4-6pm Console Games Day",1487624400000L,1487631600000L));
+        schedulelist.add(new ScheduleContentFragment("Tuesday", "6-9pm PC Games Day",1487718000000L,1487728800000L
+        ));
+        schedulelist.add(new ScheduleContentFragment("Wednesday", "No club activities",0,0));
+        schedulelist.add(new ScheduleContentFragment("Thursday", "4-8pm Board Game Day",1487883600000L,1487898000000L));
+        schedulelist.add(new ScheduleContentFragment("Friday", "4-9pm PC Games Day",0,0));
+        schedulelist.add(new ScheduleContentFragment("Weekends", "No club activities",0,0));
         //using a custom adapter for the list view
         final CustomAdapter adapter = new CustomAdapter(getContext(), schedulelist);
         list.setAdapter(adapter);
@@ -139,26 +148,37 @@ public class ScheduleFragment extends Fragment {
          * After that item has item_view attached to it
          * we populate the item_view's name TextView
          */
-        public View getView(int position, View convertView, ViewGroup parent){
+        public View getView(int position, View convertView, ViewGroup parent) {
             ScheduleContentFragment item = getItem(position);
 
-            if(convertView == null){
+            if (convertView == null) {
                 convertView =
                         LayoutInflater.from(getContext()).inflate(
                                 R.layout.item_view, parent, false);
             }
-
+            begin = item.getStartTime();
+            end = item.getEndTime();
             TextView name = (TextView) convertView.findViewById(R.id.name);
             name.setText(item.getName());
-            ImageView image = (ImageView) convertView.findViewById(R.id.location);
+            ImageView image = (ImageView) convertView.findViewById(location);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                 //Insert calendar intent here
+                    Intent intent = new Intent(Intent.ACTION_INSERT)
+                            .putExtra(CalendarContract.Events.TITLE, "Game Club")
+                            .putExtra(CalendarContract.Events.EVENT_LOCATION, "St Clair College")
+                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin)
+                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end);
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                         startActivity(intent);
                     }
+
+
+
                 }
             });
-            return  convertView;
+            return convertView;
+
         }
 
 

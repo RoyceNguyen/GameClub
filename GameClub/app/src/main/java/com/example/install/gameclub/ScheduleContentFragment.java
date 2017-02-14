@@ -3,23 +3,33 @@ package com.example.install.gameclub;
 public class ScheduleContentFragment{
     private String name;
     private String description;
-    private String calendar;
+    private long startTime;
+    private long endTime;
 
 
 
-    public ScheduleContentFragment(String name , String description , String calendar){
+    public ScheduleContentFragment(String name , String description , long startTime , long endTime){
         this.name = name;
         this.description = description;
-        this.calendar = calendar;
+        this.startTime = startTime;
+        this.endTime = endTime;
 
     }
 
-    public String getCalendar() {
-        return calendar;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public void setCalendar(String calendar) {
-        this.calendar = calendar;
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 
     public String getDescription() {
