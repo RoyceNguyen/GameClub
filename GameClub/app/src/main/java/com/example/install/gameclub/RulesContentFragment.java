@@ -91,7 +91,7 @@ public class RulesContentFragment extends Fragment {
                     viewPager.setCurrentItem(location);
                 }
                 else if(location == 0){
-                    viewPager.setCurrentItem(viewPager.getChildCount()+1);
+                    viewPager.setCurrentItem(viewPager.getChildCount()+2);
                 }
             }
         });
@@ -101,7 +101,7 @@ public class RulesContentFragment extends Fragment {
             public void onClick(View v) {
                 int location = viewPager.getCurrentItem();
                 location++;
-                if(location >= viewPager.getChildCount()+1){
+                if(location >= viewPager.getChildCount()+2){
                     viewPager.setCurrentItem(0);
                 }
                 else{
