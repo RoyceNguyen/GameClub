@@ -160,11 +160,12 @@ public class ScheduleFragment extends Fragment {
             end = item.getEndTime();
             TextView name = (TextView) convertView.findViewById(R.id.name);
             name.setText(item.getName());
-            ImageView image = (ImageView) convertView.findViewById(location);
+            ImageView image = (ImageView) convertView.findViewById(R.id.location);
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_INSERT)
+                            .setData(CalendarContract.Events.CONTENT_URI)
                             .putExtra(CalendarContract.Events.TITLE, "Game Club")
                             .putExtra(CalendarContract.Events.EVENT_LOCATION, "St Clair College")
                             .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin)
@@ -172,9 +173,6 @@ public class ScheduleFragment extends Fragment {
                     if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                          startActivity(intent);
                     }
-
-
-
                 }
             });
             return convertView;
