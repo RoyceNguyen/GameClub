@@ -10,7 +10,7 @@ public class ScheduleContentFragment{
     public ScheduleContentFragment(String name , String description , String calendar){
         this.name = name;
         this.description = description;
-        this.calendar = calendar
+        this.calendar = calendar;
 
     }
 
@@ -21,7 +21,7 @@ public class ScheduleContentFragment{
     public void setCalendar(String calendar) {
         this.calendar = calendar;
     }
-    
+
     public String getDescription() {
         return description;
     }

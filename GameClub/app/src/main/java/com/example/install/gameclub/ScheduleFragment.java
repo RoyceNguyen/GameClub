@@ -1,14 +1,17 @@
 package com.example.install.gameclub;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -91,12 +94,23 @@ public class ScheduleFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ScheduleTextView =
                         (TextView) view.findViewById(R.id.description);
+                TextView details = (TextView) view.findViewById(R.id.details);
+                ImageView chevron = (ImageView) view.findViewById(R.id.chevron);
                 if(ScheduleTextView.getText() == ""){
                     ScheduleTextView.setText(
+                            //Update the text of the description
                             ((ScheduleContentFragment) list.getItemAtPosition(position)).getDescription());
+                    //update the text of the show less
+                    details.setText("Click to show less");
+                    //update the chevron image
+                    chevron.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
                 }
                 else{
                     ScheduleTextView.setText("");
+                    //update the text of the show more
+                    details.setText("Click to show more");
+                    //update the chevron image
+                    chevron.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
                 }
             }
         });
@@ -136,7 +150,14 @@ public class ScheduleFragment extends Fragment {
 
             TextView name = (TextView) convertView.findViewById(R.id.name);
             name.setText(item.getName());
-
+            ImageView image = (ImageView) convertView.findViewById(R.id.location);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                 //Insert calendar intent here
+                    }
+                }
+            });
             return  convertView;
         }
 
