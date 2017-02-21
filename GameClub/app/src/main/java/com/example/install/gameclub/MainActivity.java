@@ -19,7 +19,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainFragment.OnFragmentInteractionListener,RulesContentFragment.OnFragmentInteractionListener,
-RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener
+RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener,CreateSchedule.OnFragmentInteractionListener
 {
     //creating a fragment manager
     FragmentManager fm = getSupportFragmentManager();
@@ -41,7 +41,7 @@ RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteracti
             tran.replace(R.id.content_main, new MainFragment());
             tran.commit();
         }
-       /* fab = (FloatingActionButton) findViewById(R.id.fab);
+       fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,7 +49,7 @@ RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteracti
                         .setAction("Action", null).show();
             }
         });
-        */
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

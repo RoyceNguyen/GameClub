@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static com.example.install.gameclub.MainActivity.fab;
 import static com.example.install.gameclub.R.attr.title;
 import static com.example.install.gameclub.R.id.location;
 
@@ -79,22 +82,38 @@ public class ScheduleFragment extends Fragment {
 
         }
     }
+    FragmentManager fm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
+        fm = getActivity().getSupportFragmentManager();
+        fab.setImageResource(R.drawable.ic_add_black_24dp);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.addToBackStack(null);
+                ft.replace(R.id.content_main,new CreateSchedule());
+                ft.commit();
+            }
+        });
+
+
         //creating the listview and adding contents to the listview
         list = (ListView) view.findViewById(R.id.schedulelist);
-        final ArrayList<ScheduleContentFragment> schedulelist = new ArrayList<ScheduleContentFragment>();
-        schedulelist.add(new ScheduleContentFragment("Monday", "4-6pm Console Games Day",1487624400000L,1487631600000L));
-        schedulelist.add(new ScheduleContentFragment("Tuesday", "6-9pm PC Games Day",1487718000000L,1487728800000L
-        ));
-        schedulelist.add(new ScheduleContentFragment("Wednesday", "No club activities",0,0));
-        schedulelist.add(new ScheduleContentFragment("Thursday", "4-8pm Board Game Day",1487883600000L,1487898000000L));
-        schedulelist.add(new ScheduleContentFragment("Friday", "4-9pm PC Games Day",0,0));
-        schedulelist.add(new ScheduleContentFragment("Weekends", "No club activities",0,0));
+        DatabaseHandler db = new DatabaseHandler(getContext());
+
+        final ArrayList<ScheduleContentFragment> schedulelist = db.getAllSchedule();
+        db.closeDB();
+        //schedulelist.add(new ScheduleContentFragment("Monday", "4-6pm Console Games Day",1487624400000L,1487631600000L));
+        //schedulelist.add(new ScheduleContentFragment("Tuesday", "6-9pm PC Games Day",1487718000000L,1487728800000L));
+        //schedulelist.add(new ScheduleContentFragment("Wednesday", "No club activities",0,0));
+        //schedulelist.add(new ScheduleContentFragment("Thursday", "4-8pm Board Game Day",1487883600000L,1487898000000L));
+        //schedulelist.add(new ScheduleContentFragment("Friday", "4-9pm PC Games Day",0,0));
+        //schedulelist.add(new ScheduleContentFragment("Weekends", "No club activities",0,0));
         //using a custom adapter for the list view
         final CustomAdapter adapter = new CustomAdapter(getContext(), schedulelist);
         list.setAdapter(adapter);
@@ -156,8 +175,8 @@ public class ScheduleFragment extends Fragment {
                         LayoutInflater.from(getContext()).inflate(
                                 R.layout.item_view, parent, false);
             }
-            begin = item.getStartTime();
-            end = item.getEndTime();
+            //begin = item.getStartTime();
+            //end = item.getEndTime();
             TextView name = (TextView) convertView.findViewById(R.id.name);
             name.setText(item.getName());
             ImageView image = (ImageView) convertView.findViewById(R.id.location);
