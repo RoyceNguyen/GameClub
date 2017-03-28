@@ -2,6 +2,9 @@ package com.example.install.gameclub;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Picture;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +50,8 @@ public class ScheduleFragment extends Fragment {
     //creating variables for the listview and textview
     ListView list;
     TextView ScheduleTextView;
+    LinearLayout galleryLayout;
+
     long begin;
     long end;
 
@@ -168,7 +174,7 @@ public class ScheduleFragment extends Fragment {
          * we populate the item_view's name TextView
          */
         public View getView(int position, View convertView, ViewGroup parent) {
-            ScheduleContentFragment item = getItem(position);
+           final ScheduleContentFragment item = getItem(position);
 
             if (convertView == null) {
                 convertView =
@@ -177,7 +183,8 @@ public class ScheduleFragment extends Fragment {
             }
             //begin = item.getStartTime();
             //end = item.getEndTime();
-            TextView name = (TextView) convertView.findViewById(R.id.name);
+
+            /*TextView name = (TextView) convertView.findViewById(R.id.name);
             name.setText(item.getName());
             ImageView image = (ImageView) convertView.findViewById(R.id.location);
             image.setOnClickListener(new View.OnClickListener() {
@@ -191,6 +198,49 @@ public class ScheduleFragment extends Fragment {
                             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end);
                     if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                          startActivity(intent);
+                    }
+                }
+            });
+            */
+            //Grab the gallery layout associated with this location
+            galleryLayout =
+                    (LinearLayout) convertView.findViewById(R.id.galleryLayout);
+            //Make the gallery layout invisible
+            galleryLayout.setVisibility(View.GONE);
+            //only add items to the gallery if the gallery is empty
+            if(galleryLayout.getChildCount() == 0){
+                //Grab all the photos that match the id of the current location
+                DatabaseHandler db = new DatabaseHandler(getContext());
+                ArrayList<Picture> pics = db.getAllPictures(item.getId());
+                db.closeDB();
+                //Add those photos to the gallery
+                for(int i =0; i < pics.size(); i++){
+                    Bitmap image = BitmapFactory.decodeFile(pics.get(i).getResource());
+                    ImageView imageView = new ImageView(getContext());
+                    imageView.setImageBitmap(image);
+                    imageView.setAdjustViewBounds(true);
+                    galleryLayout.addView(imageView);
+                }
+            }
+
+            ScheduleTextView =
+                    (TextView) convertView.findViewById(R.id.description);
+            ScheduleTextView.setText(
+                    ((ScheduleContentFragment) list.getItemAtPosition(position)).getDescription()
+            );
+
+            TextView name = (TextView) convertView.findViewById(R.id.name);
+            name.setText(item.getName());
+            ImageView image = (ImageView) convertView.findViewById(R.id.location);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri geoLocation = Uri.parse(item.getLocation());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(geoLocation);
+                    if(intent.resolveActivity(
+                            getActivity().getPackageManager()) != null) {
+                        startActivity(intent);
                     }
                 }
             });

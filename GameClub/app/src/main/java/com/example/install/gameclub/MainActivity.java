@@ -17,9 +17,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import static com.example.install.gameclub.R.styleable.NavigationView;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,MainFragment.OnFragmentInteractionListener,RulesContentFragment.OnFragmentInteractionListener,
-RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener,CreateSchedule.OnFragmentInteractionListener
+RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteractionListener,CreateSchedule.OnFragmentInteractionListener,AddPhoto.OnFragmentInteractionListener
 {
     //creating a fragment manager
     FragmentManager fm = getSupportFragmentManager();
@@ -114,6 +116,10 @@ RulesFragment.OnFragmentInteractionListener,ScheduleFragment.OnFragmentInteracti
             tran.replace(R.id.content_main, new ScheduleFragment());
             tran.commit();
 
+        } else if (id == R.id.nav_photo) {
+            FragmentTransaction tran = fm.beginTransaction();
+            tran.replace(R.id.content_main, new AddPhoto());
+            tran.commit();
         } else if (id == R.id.nav_contact) {
             String[] emailaddresses = {email};
             Intent intent = new Intent(Intent.ACTION_SENDTO);
