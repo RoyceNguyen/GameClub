@@ -31,6 +31,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     private static final String TABLE_RULES = "rules";
     private static final String TABLE_SCHEDULE = "schedule";
+    private static final String TABLE_PICTURES = "picture";
+    private static final String TABLE_IMAGELOCATION = "image_location";
 
     /**
      * Common column names
@@ -49,7 +51,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_NAME = "name";
     private static final String KEY_DESCRIPTION = "description";
     private static final String KEY_URL= "URL";
+    /**
+     *Picture Table Column Names
+     */
+    private static final String COLUMN_RESOURCE = "resource";
 
+    /**
+     *image_trip Table Column Names
+     */
+    private static final String COLUMN_PICTURE = "id_picture";
+    private static final String COLUMN_SCHEDULE = "schedule";
 
     /**
      * Create statements for all our tables
@@ -62,6 +73,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String CREATE_SCHEDULE_TABLE = "CREATE TABLE " + TABLE_SCHEDULE +
             "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT," +
             KEY_DESCRIPTION + " TEXT, " + KEY_URL + " TEXT)";
+    private static final String CREATE_PICTURES_TABLE = "CREATE TABLE " + TABLE_PICTURES + "("
+            + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ," + COLUMN_RESOURCE + " TEXT" + ")";
+
+    private static final String CREATE_IMAGE_LOCATION_TABLE = "CREATE TABLE " + TABLE_IMAGELOCATION + "(" +KEY_ID +"),"
+            + COLUMN_PICTURE + " INTEGER REFERENCES " + TABLE_PICTURES + "(" + KEY_ID +")" +")";
 
 
     public DatabaseHandler(Context context){
@@ -71,11 +87,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db){
         db.execSQL(CREATE_RULES_TABLE);
         db.execSQL(CREATE_SCHEDULE_TABLE);
+        db.execSQL(CREATE_IMAGE_LOCATION_TABLE);
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion ){
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RULES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SCHEDULE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_IMAGELOCATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PICTURES);
         onCreate(db);
     }
 
@@ -98,6 +118,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_DESCRIPTION, scheduleContentFragment.getDescription());
         values.put(KEY_URL, scheduleContentFragment.getUrl());
         db.insert(TABLE_SCHEDULE, null, values);
+    }
+    public int addPicture(Picture picture) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_RESOURCE, picture.getResource());
+        db.insert(TABLE_PICTURES, null, values);
+        db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT last_insert_rowid()", null);
+        if(cursor.moveToFirst()) {
+            int location = Integer.parseInt(cursor.getString(0));
+            System.out.println("Record ID " + location);
+            db.close();
+            return location;
+        }
+        return -1;
+    }
+    public void addImageLocation(int image,int schedule){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_PICTURE, image);
+        values.put(COLUMN_SCHEDULE, schedule);
+        db.insert(TABLE_IMAGELOCATION, null, values);
+        db.close();
     }
 
 
@@ -150,13 +193,65 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         return  scheduleList;
     }
+    public Picture getPicture(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_PICTURES, new String[] {KEY_ID, COLUMN_RESOURCE}, KEY_ID + "=?",
+                new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Picture picture = new Picture(Integer.parseInt(cursor.getString(0)),
+                cursor.getString(1));
+
+        return picture;
+    }
+
+    public ArrayList<Picture> getAllPictures() {
+        ArrayList<Picture> pictureList = new ArrayList<Picture>();
+        String selectQuery = "SELECT  * FROM " + TABLE_PICTURES;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Picture picture = new Picture();
+                picture.setId(Integer.parseInt(cursor.getString(0)));
+                picture.setResource(cursor.getString(1));
+                pictureList.add(picture);
+            } while (cursor.moveToNext());
+        }
+        return pictureList;
+    }
+    public ArrayList<Picture> getAllPictures(int location) {
+        ArrayList<Picture> pictureList = new ArrayList<Picture>();
+        String selectQuery = "SELECT  * FROM " + TABLE_IMAGELOCATION + " WHERE " + COLUMN_SCHEDULE + " = " + location;
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String innerQuery = "SELECT * FROM " + TABLE_PICTURES + " WHERE " + KEY_ID + "=" + cursor.getInt(1);
+                Cursor innerCursor = db.rawQuery(innerQuery, null);
+                if (innerCursor.moveToFirst()) {
+                    do {
+                        Picture picture = new Picture();
+                        picture.setId(Integer.parseInt(innerCursor.getString(0)));
+                        picture.setResource(innerCursor.getString(1));
+                        pictureList.add(picture);
+                    } while (innerCursor.moveToNext());
+                }
+            }while (cursor.moveToNext());
+        }
+        return pictureList;
+    }
 
 
     /**
      * UPDATE OPERATIONS
      */
 
-    public int updateLocation(ScheduleContentFragment scheduleContentFragment){
+    public int updateSchedule(ScheduleContentFragment scheduleContentFragment){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, scheduleContentFragment.getName());
@@ -165,14 +260,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return db.update(TABLE_SCHEDULE, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(scheduleContentFragment.getId())});
     }
+    public int updatePicture(Picture picture) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_RESOURCE, picture.getResource());
+        return db.update(TABLE_PICTURES, values, KEY_ID + " = ?", new String[] { String.valueOf(picture.getId()) });
+    }
     /**
      * DELETE OPERATIONS
      */
 
-    public void deleteLocation(long location_id){
+    public void deleteSchedule(long location_id){
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_SCHEDULE, KEY_ID + " = ?",
                 new String[]{String.valueOf(location_id)});
+    }
+    public void deletePicture(long picture_id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_PICTURES, KEY_ID + " = ?",
+                new String[] { String.valueOf(picture_id) });
     }
 
     /**

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Picture;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
@@ -235,11 +235,13 @@ public class ScheduleFragment extends Fragment {
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Uri geoLocation = Uri.parse(item.getLocation());
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(geoLocation);
-                    if(intent.resolveActivity(
-                            getActivity().getPackageManager()) != null) {
+                    Intent intent = new Intent(Intent.ACTION_INSERT)
+                            .setData(CalendarContract.Events.CONTENT_URI)
+                            .putExtra(CalendarContract.Events.TITLE, "Game Club")
+                            .putExtra(CalendarContract.Events.EVENT_LOCATION, "St Clair College")
+                            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin)
+                            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end);
+                    if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
                         startActivity(intent);
                     }
                 }
