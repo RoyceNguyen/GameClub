@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import static com.example.install.gameclub.MainActivity.fab;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,7 +66,9 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        fab.setVisibility(View.GONE);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
